@@ -1,14 +1,13 @@
 <?php
-namespace Awallef\GoogleMaps\Http;
+namespace Awallef\GoogleMaps\Database\Driver;
 
 use Cake\Http\Client;
-use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
 use Cake\Network\Exception\BadRequestException;
 use Cake\Network\Exception\ForbiddenException;
 use Cake\Core\InstanceConfigTrait;
 
-class Api
+class GoogleMapsApi
 {
   use InstanceConfigTrait;
 
@@ -20,11 +19,30 @@ class Api
     'url' => 'https://maps.googleapis.com/maps/api/'
   ];
 
+  public $connected = false;
+
   public function __construct(array $config = [])
   {
     $this->setConfig($config);
     $this->_url = $this->config()['url'];
-    $this->_key = Configure::read('Api.google-map-api');
+  }
+
+  public function connect()
+  {
+    return true;
+  }
+
+  private function createConnectionName()
+  {
+    return 'GoogleMapsApi';
+  }
+  public function disconnect()
+  {
+    return true;
+  }
+  public function isConnected()
+  {
+    return $this->connected;
   }
 
   public function query($service, $action, $args  = [])
