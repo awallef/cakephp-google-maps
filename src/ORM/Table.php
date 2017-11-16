@@ -6,6 +6,14 @@ use Cake\ORM\Table as CakeTable;
 
 class Table extends CakeTable
 {
+
+  public static function defaultConnectionName()
+  {
+    return 'google-map-api';
+  }
+
+  protected $service = '';
+
   public function hasField($field)
   {
     return true;
@@ -14,6 +22,7 @@ class Table extends CakeTable
   public function find($type = 'all', $options = [])
   {
     debug('coucou');
+    debug($this->connection()->driver()->config());
     /*
     $query = new MongoFinder($this->__getCollection(), $options);
     $method = 'find' . ucfirst($type);

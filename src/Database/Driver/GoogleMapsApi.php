@@ -16,7 +16,8 @@ class GoogleMapsApi
   protected $_key;
 
   protected $_defaultConfig = [
-    'url' => 'https://maps.googleapis.com/maps/api/'
+    'url' => 'https://maps.googleapis.com/maps/api/',
+    'key' => 'XXX'
   ];
 
   public $connected = false;
@@ -25,6 +26,7 @@ class GoogleMapsApi
   {
     $this->setConfig($config);
     $this->_url = $this->config()['url'];
+    $this->_key = $this->config()['key'];
   }
 
   public function connect()

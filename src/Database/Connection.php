@@ -18,7 +18,7 @@ class Connection implements ConnectionInterface
   public function __construct($config)
   {
     $this->_config = $config;
-    $this->driver('google-maps', $config);
+    $this->driver('google-maps-api', $config);
     if (!empty($config['log'])) {
       $this->logQueries($config['log']);
     }
@@ -34,7 +34,7 @@ class Connection implements ConnectionInterface
 
   public function config(){ return $this->_config; }
 
-  public function configName(){ return 'google-maps'; }
+  public function configName(){ return 'google-maps-api'; }
 
   public function driver($driver = null, $config = [])
   {
