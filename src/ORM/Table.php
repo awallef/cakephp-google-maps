@@ -1,47 +1,44 @@
 <?php
 namespace Awallef\GoogleMaps\ORM;
 
+use BadMethodCallException;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table as CakeTable;
 
 class Table extends CakeTable
 {
 
+  public $service = 'none';
+
   public static function defaultConnectionName()
   {
     return 'google-map-api';
   }
-
-  protected $service = '';
 
   public function hasField($field)
   {
     return true;
   }
 
-  public function find($type = 'all', $options = [])
+  public function query()
   {
-    debug($this->connection()->driver()->config());
-    return $this->connection()->query('place','textsearch', [
-      'query' => 'morges',
-      'radius' => '500',
-    ]);
-    /*
-    $query = new MongoFinder($this->__getCollection(), $options);
-    $method = 'find' . ucfirst($type);
-    if (method_exists($query, $method)) {
-      $mongoCursor = $query->{$method}();
-      $results = new ResultSet($mongoCursor, $this->alias());
-      if (isset($options['whitelist'])) {
-        return new MongoQuery($results->toArray(), $query->count());
-      } else {
-        return $results->toArray();
-      }
-    }
-    throw new BadMethodCallException(
-      sprintf('Unknown method "%s"', $method)
-    );
-    */
+    return new GoogleMapsQuery($this->connection(), $this);
+  }
+
+  public function find($type = 'geocode', $options = [])
+  {
+    $query = $this->query();
+    $query->select();
+    return $this->callFinderIfExists($type, $query, $options);
+  }
+
+  public function callFinderIfExists($type, GoogleMapsQuery $query, array $options = [])
+  {
+      $query->applyOptions($options);
+      $options = $query->getOptions();
+      $finder = 'find' . $type;
+      if (method_exists($this, $finder)) return $this->{$finder}($query, $options);
+      throw new BadMethodCallException(sprintf('Unknown finder method "%s"', $type));
   }
 
   public function get($primaryKey, $options = [])
