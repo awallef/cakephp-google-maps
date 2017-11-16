@@ -21,8 +21,11 @@ class Table extends CakeTable
 
   public function find($type = 'all', $options = [])
   {
-    debug('coucou');
     debug($this->connection()->driver()->config());
+    return $this->connection()->query('place','textsearch', [
+      'query' => 'morges',
+      'radius' => '500',
+    ]);
     /*
     $query = new MongoFinder($this->__getCollection(), $options);
     $method = 'find' . ucfirst($type);

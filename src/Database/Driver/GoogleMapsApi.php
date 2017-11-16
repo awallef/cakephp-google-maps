@@ -49,7 +49,7 @@ class GoogleMapsApi
 
   public function query($service, $action, $args  = [])
   {
-    $response = $this->_query($service, $action, $args);
+    return $this->_query($service, $action, $args);
   }
 
   protected function _query($service, $action, $args  = [])

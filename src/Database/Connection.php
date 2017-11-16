@@ -32,6 +32,11 @@ class Connection implements ConnectionInterface
     }
   }
 
+  public function query($service, $action, $args  = [])
+  {
+    return $this->_driver->query($service, $action, $args);
+  }
+
   public function config(){ return $this->_config; }
 
   public function configName(){ return 'google-maps-api'; }
