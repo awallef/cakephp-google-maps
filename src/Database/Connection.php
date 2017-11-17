@@ -74,7 +74,6 @@ class Connection implements ConnectionInterface
 
   public function getDriver()
   {
-    debug_print_backtrace();
     return $this->_driver;
   }
 

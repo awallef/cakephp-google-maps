@@ -54,12 +54,14 @@ class GoogleMapsApi
 
   protected function _query($service, $action, $args  = [])
   {
-    $response = $this->_getClient()->get($this->_getUrl($service, $action),$this->_getArgs($args));
+    $url = $this->_getUrl($service, $action);
+    $response = $this->_getClient()->get($url,$this->_getArgs($args));
     switch($response->code)
     {
       case 200: return $this->_jsonParseResposnse($response->body);
-      case 404: throw new NotFoundException("Service or action does not exists on Google Maps API.");
-      default: throw new BadRequestException("Google Maps API encountered an unknown error.");
+      case 404: throw new NotFoundException("Service or action does not exists on Google Maps API: ".$url);
+      case 400: throw new BadRequestException("Google Maps API encountered an error: ".$response->body);
+      default: throw new BadRequestException("Google Maps API encountered an unknown error. ".$response->code);
     }
   }
 

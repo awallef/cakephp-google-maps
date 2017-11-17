@@ -7,38 +7,20 @@ class GoogleMapsQuery extends Query
 {
   public function __debugInfo()
   {
-    return [
-      'Hello : ) This is a Google Maps Query Object' => 'Use foreach to execute it'
-    ];
+    return ['Hello : ) This is a Google Maps Query Object' => 'Use foreach to execute it'];
   }
   protected function _execute()
   {
-    /*
-    $this->triggerBeforeFind();
-    if ($this->_results) {
-      $decorator = $this->_decoratorClass();
-
-      return new $decorator($this->_results);
-    }
-    $statement = $this->getEagerLoader()->loadExternal($this, $this->execute());
-
-
-    */
-    debug($this->type());
-    switch($this->type())
-    {
-      case 'select': return $this->_select();
-    }
-
-
-
-    //return new GoogleMapsResultSet($this, $statement);
+    debug('execute');
+    $results = $this->getConnection()->getDriver()->query($this->repository()->service, $this->repository()->action, $this->getParams());
+    return new GoogleMapsResultSet($results, $this->repository());
   }
 
-  protected function _select()
+  public function getParams()
   {
-    debug($this->repository());
-    debug($this->_parts['where']);
-    return [];
+    $params = [];
+    if($this->_parts['where'])
+      $this->_parts['where']->traverse(function($c) use(&$params){$params[$c->getField()] = $c->getValue();});
+    return $params;
   }
 }
