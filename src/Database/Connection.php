@@ -32,11 +32,6 @@ class Connection implements ConnectionInterface
     }
   }
 
-  public function query($service, $action, $args  = [])
-  {
-    return $this->_driver->query($service, $action, $args);
-  }
-
   public function config(){ return $this->_config; }
 
   public function configName(){ return 'google-maps-api'; }
@@ -60,6 +55,29 @@ class Connection implements ConnectionInterface
     }
   }
 
+  /*
+  public function compileQuery($onSaitPas, $valueBinder)
+  {
+    //throw new \Exception("hoooo", 1);
+    debug(debug_print_backtrace());
+    die();
+    //debug(func_num_args());
+    //debug(func_get_arg(0));
+  }
+  */
+
+  public function run($query)
+  {
+    debug('run');
+    //die();
+  }
+
+  public function getDriver()
+  {
+    debug_print_backtrace();
+    return $this->_driver;
+  }
+
   public function disconnect()
   {
     if ($this->_driver->isConnected()) {
@@ -71,6 +89,8 @@ class Connection implements ConnectionInterface
   public function isConnected(){ return $this->_driver->isConnected(); }
 
   public function schemaCollection($collection = null){ return $this->_schemaCollection = new GoogleMapsSchema($this->_driver); }
+
+  public function getSchemaCollection($collection = null){ return $this->schemaCollection($collection); }
 
   public function transactional(callable $transaction){ return false; }
 

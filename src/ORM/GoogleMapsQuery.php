@@ -1,46 +1,44 @@
 <?php
 namespace Awallef\GoogleMaps\ORM;
 
-class GoogleMapsQuery
+use Cake\ORM\Query;
+
+class GoogleMapsQuery extends Query
 {
-  public $action = '';
-  public $service = '';
-
-  protected $_table;
-  protected $_connection;
-  protected $_fields = [];
-  protected $_options = [
-    'conditions' => []
-  ];
-
-  public function __construct($connection, $table)
+  public function __debugInfo()
   {
-    $this->_connection = $connection;
-    $this->_table = $table;
-    $this->service = $table->service;
+    return [
+      'Hello : ) This is a Google Maps Query Object' => 'Use foreach to execute it'
+    ];
+  }
+  protected function _execute()
+  {
+    /*
+    $this->triggerBeforeFind();
+    if ($this->_results) {
+      $decorator = $this->_decoratorClass();
+
+      return new $decorator($this->_results);
+    }
+    $statement = $this->getEagerLoader()->loadExternal($this, $this->execute());
+
+
+    */
+    debug($this->type());
+    switch($this->type())
+    {
+      case 'select': return $this->_select();
+    }
+
+
+
+    //return new GoogleMapsResultSet($this, $statement);
   }
 
-  public function select($fields = [])
+  protected function _select()
   {
-    $this->_fields = array_merge($this->_fields, $fields);
-    return $this;
+    debug($this->repository());
+    debug($this->_parts['where']);
+    return [];
   }
-
-  public function applyOptions($options = [])
-  {
-    $this->_options = array_merge($this->_options, $options);
-    return $this;
-  }
-
-  public function getOptions()
-  {
-    return $this->_options;
-  }
-
-  public function where($conditions = [])
-  {
-    $this->_options['conditions'] = array_merge($this->_options['conditions'], $conditions);
-    return $this;
-  }
-
 }
