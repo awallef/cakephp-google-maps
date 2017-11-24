@@ -68,8 +68,7 @@ class Connection implements ConnectionInterface
 
   public function run($query)
   {
-    debug('run');
-    //die();
+    return $query;
   }
 
   public function getDriver()

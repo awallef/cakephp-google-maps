@@ -55,8 +55,8 @@ class GoogleMapsApi
   protected function _query($service, $action, $args  = [])
   {
     $url = $this->_getUrl($service, $action);
-    debug($url);
-    debug($this->_getArgs($args));
+    //debug($url);
+    //debug($this->_getArgs($args));
     $response = $this->_getClient()->get($url,$this->_getArgs($args));
     switch($response->code)
     {
@@ -74,6 +74,7 @@ class GoogleMapsApi
     } catch (Exception $e) {
       throw new BadRequestException("Unable to decode Google Maps API JSON response");
     }
+    //debug($result);
     switch ($result->status)
     {
       case 'OK': return (!empty($result->results))? $result->results: ((!empty($result->result))? [$result->result]: []);
@@ -97,7 +98,8 @@ class GoogleMapsApi
 
   protected function _getArgs($args)
   {
-    $args['key'] = $this->_key;
-    return $args;
+    $newArgs = ['key' => $this->_key];
+    foreach($args as $key => $value) $newArgs[preg_replace('/^[A-Z]{1}[a-z]*./', '', $key)] = $value;
+    return $newArgs;
   }
 }

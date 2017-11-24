@@ -34,5 +34,4 @@ class PlacesTable extends Table {
     $this->action = 'radarsearch';
     return $query;
   }
-
 }

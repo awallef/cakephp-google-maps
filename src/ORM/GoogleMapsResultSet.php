@@ -19,6 +19,7 @@ class GoogleMapsResultSet implements ResultSetInterface {
     $this->_results = $results;
     $this->_count = count($this->_results);
     $this->_table = $table;
+    //debug($results);
   }
 
   public function toArray($preserveKeys = true)
