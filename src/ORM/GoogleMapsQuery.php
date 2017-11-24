@@ -11,7 +11,6 @@ class GoogleMapsQuery extends Query
   }
   protected function _execute()
   {
-    debug('execute');
     $results = $this->getConnection()->getDriver()->query($this->repository()->service, $this->repository()->action, $this->getParams());
     return new GoogleMapsResultSet($results, $this->repository());
   }

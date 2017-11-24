@@ -17,6 +17,7 @@ class GoogleMapsResultSet implements ResultSetInterface {
   public function __construct($results, $table)
   {
     $this->_results = $results;
+    $this->_count = count($this->_results);
     $this->_table = $table;
   }
 
@@ -51,7 +52,9 @@ class GoogleMapsResultSet implements ResultSetInterface {
     $valid = $this->_index < $this->_count;
     if ($valid && $this->_results[$this->_index] !== null)
     {
-      $this->_current = $this->_results[$this->_index];
+      //$this->_current = $this->_results[$this->_index];
+      $document = new Document($this->_results[$this->_index], $this->_table);
+      $this->_current = $document->cakefy();
       return true;
     }
     if (!$valid)

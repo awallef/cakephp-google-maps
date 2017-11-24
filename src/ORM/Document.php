@@ -5,60 +5,33 @@ use Cake\ORM\Entity;
 
 class Document
 {
-    /**
-     * store the document
-     *
-     * @var array $_document
-     * @access protected
-     */
-    protected $_document;
-    /**
-     * table model name
-     *
-     * @var string $_registryAlias
-     * @access protected
-     */
-    protected $_registryAlias;
-    /**
-     * set document and table name
-     *
-     * @param array $document
-     * @param string $table
-     * @access public
-     */
-    public function __construct($document, $table)
-    {
-        $this->_document = $document;
-        $this->_registryAlias = $table;
-    }
-    /**
-     * convert mongo document into cake entity
-     *
-     * @return Cake\ORM\Entity
-     * @access public
-     */
-    public function cakefy()
-    {
-        foreach ($this->_document as $field => $value) {
-            $type = gettype($value);
-            if ($type == 'object') {
-                switch (get_class($value)) {
-                    case 'MongoId':
-                        $document[$field] = $value->__toString();
-                        break;
-                    case 'MongoDate':
-                        $document[$field] = new Time($value->sec);
-                        break;
-                    default:
-                        throw new Exception(get_class($value) . ' conversion not implemented.');
-                        break;
-                }
-            } elseif ($type == 'array') {
-                $document[$field] = $this->cakefy($value);
-            } else {
-                $document[$field] = $value;
-            }
+  protected $_document;
+  protected $_registryAlias;
+  public function __construct($document, $table)
+  {
+    $this->_document = $document;
+    $this->_registryAlias = $table;
+  }
+  public function cakefy($value = null)
+  {
+    $data = ($value)? $value: $this->_document;
+    foreach ($data as $field => $value) {
+      $type = gettype($value);
+      if ($type == 'object') {
+        switch (get_class($value)) {
+          case 'stdClass':
+            $document[$field] = $value;//->__toString();
+            break;
+          default:
+            throw new \Exception(get_class($value) . ' conversion not implemented.');
+            break;
         }
-        return new Entity($document, ['markClean' => true, 'markNew' => false, 'source' => $this->_registryAlias]);
+      //} elseif ($type == 'array') {
+      //  $document[$field] = $this->cakefy($value);
+      } else {
+        $document[$field] = $value;
+      }
     }
+    return new Entity($document, ['markClean' => true, 'markNew' => false, 'source' => $this->_registryAlias]);
+  }
 }
