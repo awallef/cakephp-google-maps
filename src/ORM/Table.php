@@ -10,6 +10,19 @@ class Table extends CakeTable
   public $service = 'geocode';
   public $action = null;
 
+  public function initialize(array $config)
+  {
+    parent::initialize($config);
+
+    $this->addBehavior('Search.Search');
+    $this->searchManager()
+    ->add('geo', 'Search.Callback', [
+      'callback' => function ($query, $args, $filter) {
+        return $query;
+      }
+    ]);
+  }
+
   public static function defaultConnectionName(){ return 'google-map-api';}
 
   public function hasField($field)
